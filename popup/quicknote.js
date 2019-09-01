@@ -1,7 +1,9 @@
 /* initialise variables */
 
-var inputTitle = document.querySelector('.new-note input');
-var inputBody = document.querySelector('.radio-div textarea');
+var inputTitle = document.querySelector('.new-note input').getAttribute("value");
+//var inputBody = document.getElementById('txt').value;
+
+//var entryTime = document.querySelector('.add button').getAttribute("value");
 
 var noteContainer = document.querySelector('.note-container');
 
@@ -59,9 +61,15 @@ function addNote() {
 
   callOnActiveTab((tab) => {
     // let tabId = tab.id;
+	var inputBody = document.getElementById('txt').value;
+	var s=document.getElementById("sTime");
+	var d = new Date();
+    var n = d.getTime();
+	var entryTime = n;//document.querySelector('.add button').getAttribute("timeValue");
+
     var noteTitle = tab.url;//inputTitle.value;
-    var noteBody = inputBody.value;
-	alert("noteBody");
+    var noteBody = inputBody;
+	
     var gettingItem = localStorage.getItem(noteTitle);
 	//alert(gettingItem);
 	if(gettingItem === null){
@@ -70,11 +78,27 @@ function addNote() {
         //inputTitle.value = '';
         alert(noteTitle);
             inputBody.value = '';
-            storeNote(noteTitle,noteBody);
+            storeNote(noteTitle, noteBody);
+			storeNote(noteTitle+noteTitle, parseInt(entryTime)+parseInt(inputBody));
+			var getting = browser.runtime.getBackgroundPage();
+   getting.then(onGot, onError);
+			alert(noteTitle);
+			alert(inputBody);
+			alert(entryTime)
           }
 	}
+	
+	function onGot(page){
+		//alert("success");
+		page.update();
+	}
+	
+	function onError(error){
+	alert(error);
+	}
    
-
+   //var getting = browser.runtime.getBackgroundpage();
+   //getting.then(onGot.onError);
 
   });
 
@@ -86,9 +110,9 @@ function addNote() {
 function storeNote(title, body) {
   localStorage.setItem(title, body);
   var querying = browser.tabs.query({url: title});
-  alert("a");
+  //alert("a");
   querying.then((result) => {
-      alert("a");
+      //alert("a");
       for(let tab of result) {
         displayNote(tab.title,body);
       }
