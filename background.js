@@ -1,20 +1,41 @@
-function onError(error){
-    console.log(error);
-}
-
-var d;
-function onGot(item){
-    d = item;
-}
+//function onError(error){
+//    console.log(error);
+//}
+//var inputTitle = document.querySelector('.new-note input');
+//var d;
+//function onGot(item){
+//   d = item;
+//}
 
 var e = "hello";
 
-let timestore = browser.storage.local.get("a");
-timestore.then(onGot,onError);
+//let timestore = browser.storage.local.get();
+//timestore.then(onGot,onError);
 //
 //
+//localStorage.setItem('myCat', 'Tom');
 
- var cakeNotification = "cake-notification";
+function getCurrentWindowTabs() {
+  return browser.tabs.query({currentWindow: true});
+}
+var dis="";
+getCurrentWindowTabs().then((tabs) => {
+      for (var tab of tabs) {
+		  //alert(tab);
+        var r = localStorage.getItem(tab.url);
+		//alert(r);
+		if(r!==null){
+		    var curValue = r;
+            dis = dis + curValue;
+		}
+      }
+    });
+
+var cat=localStorage.getItem('myCat');
+if(cat===null){
+	cat="nulll";
+}
+var cakeNotification = "cake-notification";
 
 /*
 
@@ -34,7 +55,7 @@ browser.alarms.onAlarm.addListener(function(alarm) {
         "type": "basic",
         "iconUrl": browser.runtime.getURL("icons/cake-96.png"),
         "title": "Time for cake!",
-        "message":e
+        "message":"l"
     });
 });
 

@@ -1,7 +1,7 @@
 /* initialise variables */
 
 var inputTitle = document.querySelector('.new-note input');
-var inputBody = document.querySelector('.new-note textarea');
+var inputBody = document.querySelector('.radio-div textarea');
 
 var noteContainer = document.querySelector('.note-container');
 
@@ -22,16 +22,19 @@ function onError(error) {
 /* display previously-saved stored notes on startup */
 
 initialize();
-
+	
 function initialize() {
-  var gettingAllStorageItems = browser.storage.local.get(null);
-  gettingAllStorageItems.then((results) => {
-    var noteKeys = Object.keys(results);
-    for (let noteKey of noteKeys) {
-      var curValue = results[noteKey];
-      displayNote(noteKey,curValue);
-    }
-  }, onError);
+  getCurrentWindowTabs().then((tabs) => {
+      for (var tab of tabs) {
+		  //alert(tab);
+        var r = localStorage.getItem(tab.url);
+		//alert(r);
+		if(r!==null){
+		    var curValue = r;
+            displayNote(tab.url,curValue);
+		}
+      }
+    });
 }
 
 /* Add a note to the display, and storage */
@@ -58,16 +61,19 @@ function addNote() {
     // let tabId = tab.id;
     var noteTitle = tab.url;//inputTitle.value;
     var noteBody = inputBody.value;
-    var gettingItem = browser.storage.local.get(noteTitle);
-    gettingItem.then((result) => {
-      var objTest = Object.keys(result);
-      if(objTest.length < 1 && noteTitle !== '' && noteBody !== '') {
+	alert("noteBody");
+    var gettingItem = localStorage.getItem(noteTitle);
+	//alert(gettingItem);
+	if(gettingItem === null){
+		var objTest = gettingItem;
+          if(objTest===null && noteTitle !== '' && noteBody !== '') {
         //inputTitle.value = '';
-        //alert(noteTitle);
-        inputBody.value = '';
-        storeNote(noteTitle,noteBody);
-      }
-    }, onError);
+        alert(noteTitle);
+            inputBody.value = '';
+            storeNote(noteTitle,noteBody);
+          }
+	}
+   
 
 
   });
@@ -78,24 +84,24 @@ function addNote() {
 /* function to store a new note in storage */
 
 function storeNote(title, body) {
-  var storingNote = browser.storage.local.set({ [title] : body });
-  storingNote.then(() => {
-    var querying = browser.tabs.query({url: title});
-    alert("a");
-    querying.then((result) => {
+  localStorage.setItem(title, body);
+  var querying = browser.tabs.query({url: title});
+  alert("a");
+  querying.then((result) => {
       alert("a");
       for(let tab of result) {
         displayNote(tab.title,body);
       }
       // displayNote(result,body);
     }, onError);
-    //displayNote(title,body);
-  }, onError);
+
 }
 
 /* function to display a note in the note box */
 
 function displayNote(title, body) {
+	
+	
 
   /* create note display box */
   var note = document.createElement('div');
@@ -207,7 +213,7 @@ function clearAll() {
   while (noteContainer.firstChild) {
       noteContainer.removeChild(noteContainer.firstChild);
   }
-  browser.storage.local.clear();
+  localStorage.clear();
 }
 
 //alert("d");

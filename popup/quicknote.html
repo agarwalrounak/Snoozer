@@ -4,6 +4,14 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="quicknote.css"/>
+	<script>
+	function setTime(){
+	var s=document.getElementById("sTime");
+	var d = new Date();
+    var n = d.getTime();
+	s.setAttribute("timeValue", n);
+	}
+	</script>
   </head>
 
 <body>
@@ -11,11 +19,20 @@
     <div class="new-note">
 <!--      <input type="text">-->
       <input type="button" value="Snooze" />
-      <textarea></textarea>
+	  </div>
+	  
+	  <div class="radio-div">
+	  <textarea value="60"></textarea><br> 
+	  
+	  </div>
+	  
+	  
+      
       <button class="clear">Clear notes</button>
-      <button class="add">Add note</button>
+      <button class="add" id="sTime" value="1" onclick="setTime()">Add note</button>
       <div class="clearfix"></div>
-    </div>
+	  
+    
     
     <div class="note-container">
  
