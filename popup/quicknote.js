@@ -114,7 +114,8 @@ function storeNote(title, body) {
   querying.then((result) => {
       //alert("a");
       for(let tab of result) {
-        displayNote(tab.title,body);
+        alert(tab.id);
+        displayNote(tab.title,tab.id);
       }
       // displayNote(result,body);
     }, onError);
@@ -124,8 +125,17 @@ function storeNote(title, body) {
 /* function to display a note in the note box */
 
 function displayNote(title, body) {
-	
-	
+  //alert("body");
+
+
+  let tabLink = document.createElement('a');
+  tabLink.textContent = title || body;
+  tabLink.setAttribute('href', body);
+  //tabLink.setAttribute('target', '_blank');
+  tabLink.classList.add('switch-tabs');
+  noteContainer.appendChild(tabLink);
+
+
 
   /* create note display box */
   var note = document.createElement('div');
@@ -156,7 +166,7 @@ function displayNote(title, body) {
     const evtTgt = e.target;
     evtTgt.parentNode.parentNode.parentNode.removeChild(evtTgt.parentNode.parentNode);
     browser.storage.local.remove(title);
-  })
+  });
 
   /* create note edit box */
   var noteEdit = document.createElement('div');
@@ -192,19 +202,19 @@ function displayNote(title, body) {
   noteH.addEventListener('click',() => {
     noteDisplay.style.display = 'none';
     noteEdit.style.display = 'block';
-  })
+  });
 
   notePara.addEventListener('click',() => {
     noteDisplay.style.display = 'none';
     noteEdit.style.display = 'block';
-  }) 
+  });
 
   cancelBtn.addEventListener('click',() => {
     noteDisplay.style.display = 'block';
     noteEdit.style.display = 'none';
     noteTitleEdit.value = title;
     noteBodyEdit.value = body;
-  })
+  });
 
   updateBtn.addEventListener('click',() => {
     if(noteTitleEdit.value !== title || noteBodyEdit.value !== body) {
