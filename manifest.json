@@ -16,12 +16,14 @@
   "permissions": [
     "<all_urls>",
     "tabs",
+    "activeTab",
     "storage",
     "alarms",
     "notifications"
   ],
 
   "browser_action": {
+    "browser_style": true,
     "default_icon": {
      "32" : "icons/quicknote-32.png"
     },
